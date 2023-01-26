@@ -1,30 +1,24 @@
-pragma solidity ^0.5.4;
+pragma solidity ^0.8.16;
 
-import "solmate/Owned.sol"
+import "openzeppelin-contracts/utils/cryptography/ECDSA.sol";
 
+
+using ECDSA for bytes32;
+
+/**
+ *
+ */
 contract SignedData {
-    function recoverSigner(bytes32 message, bytes memory sig) public pure returns (address) {
-        uint8 v;
-        bytes32 r;
-        bytes32 s;
-        (v, r, s) = splitSignature(sig);
-        return ecrecover(message, v, r, s);
+    address public _signer;
+    bytes32 public _data;
+
+    constructor(address signer) public {
+        _signer = signer;
     }
 
-    function splitSignature(bytes memory sig) public pure returns (uint8, bytes32, bytes32) {
-        require(sig.length == 65);
-
-        bytes32 r;
-        bytes32 s;
-        uint8 v;
-        assembly {
-            // first 32 bytes, after the length prefix
-            r := mload(add(sig, 32))
-            // second 32 bytes
-            s := mload(add(sig, 64))
-            // final byte (first byte of the next 32 bytes)
-            v := byte(0, mload(add(sig, 96)))
-        }
-        return (v, r, s);
+    function isVerifiedData(bytes32 data, bytes memory sig) public returns(bool) {
+        return keccak256(data)
+            .toEthSignedMessageHash()
+            .recover(sig) == _signer;
     }
 }
