@@ -1,24 +1,48 @@
 pragma solidity ^0.8.16;
 
-import "openzeppelin-contracts/utils/cryptography/ECDSA.sol";
-
-
-using ECDSA for bytes32;
+import "forge-std/console.sol";
 
 /**
- *
+ * @title Verifiably Signed On-Chain Data
+ * @author Evan Piro
+ * @notice You can use this contract to support providing externally ECDSA
+ * signed data on-chain without needing the signer.
+ * @dev This contract is designed to be extended, utilizing the isVerifiedData
+ * function verify against a signature.
  */
 contract SignedData {
     address public _signer;
-    bytes32 public _data;
+    bytes public _data;
 
-    constructor(address signer) public {
+    event DataUpdated(address sender);
+
+    /*
+     * @dev Initialize contract with the address of account for which this contract will be
+     * checking the signature.
+     */
+    constructor(address signer) {
         _signer = signer;
     }
 
-    function isVerifiedData(bytes32 data, bytes memory sig) public returns(bool) {
-        return keccak256(data)
-            .toEthSignedMessageHash()
-            .recover(sig) == _signer;
+    /*
+     * @dev Update verified data
+     * @params see isVerifiedData below
+     * ECDSA signing function with the _signer private key.
+     */
+    function updateData(bytes memory data, uint8 v, bytes32 r, bytes32 s) public virtual {
+        require(isVerifiedData(data, v, r, s), "Data was not signed by verified account");
+        _data = data;
+        emit DataUpdated(msg.sender);
+    }
+
+    /*
+     * @dev Check if data has been signed from a signature created by the account _signer.
+     * @params The data that was signed and the signature (v, r, s) that was produced by an
+     * ECDSA signing function with the _signer private key.
+     * @return Whether or not the data was actually signed by the provided integer.
+     */
+    function isVerifiedData(bytes memory data, uint8 v, bytes32 r, bytes32 s) public virtual returns (bool) {
+        bytes32 hash = keccak256(data);
+        return ecrecover(hash, v, r, s) == _signer;
     }
 }
