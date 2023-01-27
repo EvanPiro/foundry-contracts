@@ -5,16 +5,14 @@ import "forge-std/console.sol";
 /**
  * @title Verifiably Signed On-Chain Data
  * @author Evan Piro
- * @notice You can use this contract to support providing externally ECDSA
- * signed data on-chain without needing the signer.
+ * @notice You can use this contract to support validating externally ECDSA
+ * signed data on-chain without needing the signer. The contract takes the public
+ * key of the signer and uses it to check the signature.
  * @dev This contract is designed to be extended, utilizing the isVerifiedData
  * function verify against a signature.
  */
 contract SignedData {
     address public _signer;
-    bytes public _data;
-
-    event DataUpdated(address sender);
 
     /*
      * @dev Initialize contract with the address of account for which this contract will be
@@ -22,17 +20,6 @@ contract SignedData {
      */
     constructor(address signer) {
         _signer = signer;
-    }
-
-    /*
-     * @dev Update verified data
-     * @params see isVerifiedData below
-     * ECDSA signing function with the _signer private key.
-     */
-    function updateData(bytes memory data, uint8 v, bytes32 r, bytes32 s) public virtual {
-        require(isVerifiedData(data, v, r, s), "Data was not signed by verified account");
-        _data = data;
-        emit DataUpdated(msg.sender);
     }
 
     /*
