@@ -26,7 +26,7 @@ contract SignedData {
      * @dev Check if data has been signed from a signature created by the account _signer.
      * @params The data that was signed and the signature (v, r, s) that was produced by an
      * ECDSA signing function with the _signer private key.
-     * @return Whether or not the data was actually signed by the provided integer.
+     * @return Whether or not the data was actually signed by the provided signature.
      */
     function isVerifiedData(bytes memory data, uint8 v, bytes32 r, bytes32 s) public virtual returns (bool) {
         bytes32 hash = keccak256(data);
