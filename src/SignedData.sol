@@ -1,7 +1,5 @@
 pragma solidity ^0.8.16;
 
-import "forge-std/console.sol";
-
 /**
  * @title Verifiably Signed On-Chain Data
  * @author Evan Piro
