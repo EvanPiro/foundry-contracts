@@ -1,6 +1,6 @@
-# Foundry Contracts
+# `SignedData` Contract
 
-Contract development and deployment environment with foundry.
+Contract for Verifying ECDSA Signed Data On-Chain.
 
 ## Testing
 Enter the dev shell via
