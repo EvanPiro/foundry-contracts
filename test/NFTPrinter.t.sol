@@ -13,20 +13,22 @@ contract NFTPrinterTest is Test {
 
     function testIsTransferredNFT() public {
         string memory tokenURI = "https://example.com";
-        uint256 id = nftPrinter.printNFT(tokenURI);
-        uint256 nftBalance = nftPrinter.balanceOf(address(this));
+        address senderAddress = address(this);
+        uint256 id = nftPrinter.printNFT(senderAddress, tokenURI);
+        uint256 nftBalance = nftPrinter.balanceOf(senderAddress);
         address ownerAddress = nftPrinter.ownerOf(id);
         assertEq(nftBalance, 1);
-        assertEq(ownerAddress, address(this));
+        assertEq(ownerAddress, senderAddress);
     }
 
     function testPrinterBalance() public {
         string memory tokenURI = "https://example.com";
+        address senderAddress = address(this);
         address receiverAddress = vm.addr(1);
-        uint256 id = nftPrinter.printNFT(tokenURI);
-        nftPrinter.safeTransferFrom(address(this), receiverAddress, id);
+        uint256 id = nftPrinter.printNFT(senderAddress, tokenURI);
+        nftPrinter.safeTransferFrom(senderAddress, receiverAddress, id);
         uint256 receiverBalance = nftPrinter.balanceOf(receiverAddress);
-        uint256 senderBalance = nftPrinter.balanceOf(address(this));
+        uint256 senderBalance = nftPrinter.balanceOf(senderAddress);
         address ownerAddress = nftPrinter.ownerOf(id);
         assertEq(senderBalance, 0);
         assertEq(receiverBalance, 1);

@@ -1,0 +1,1 @@
+forge script script/NFTPrinter.s.sol:DeployAndMint --rpc-url $GOERLI_RPC_URL --broadcast --verify -vvvv
