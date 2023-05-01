@@ -9,32 +9,27 @@ contract NFTPrinterTest is Test {
 
     function setUp() public {
         nftPrinter = new NFTPrinter();
-
     }
 
     function testIsTransferredNFT() public {
-        uint cid = 9;
-        nftPrinter.printNFT(cid);
-        uint nftBalance = nftPrinter.balanceOf(address(this));
+        string memory tokenURI = "https://example.com";
+        uint256 id = nftPrinter.printNFT(tokenURI);
+        uint256 nftBalance = nftPrinter.balanceOf(address(this));
+        address ownerAddress = nftPrinter.ownerOf(id);
         assertEq(nftBalance, 1);
+        assertEq(ownerAddress, address(this));
     }
 
     function testPrinterBalance() public {
-        uint cid = 9;
-        nftPrinter.printNFT(cid);
-        nftPrinter.transferFrom(address(this), vm.addr(1), cid);
-        uint receiverBalance = nftPrinter.balanceOf(vm.addr(1));
-        uint senderBalance = nftPrinter.balanceOf(address(this));
+        string memory tokenURI = "https://example.com";
+        address receiverAddress = vm.addr(1);
+        uint256 id = nftPrinter.printNFT(tokenURI);
+        nftPrinter.safeTransferFrom(address(this), receiverAddress, id);
+        uint256 receiverBalance = nftPrinter.balanceOf(receiverAddress);
+        uint256 senderBalance = nftPrinter.balanceOf(address(this));
+        address ownerAddress = nftPrinter.ownerOf(id);
         assertEq(senderBalance, 0);
         assertEq(receiverBalance, 1);
+        assertEq(ownerAddress, receiverAddress);
     }
-
-//    function testIsNotVerifiedData() public {
-//        bytes memory message = "this is a test";
-//
-//        bytes32 hash = keccak256(message);
-//        (uint8 v, bytes32 r, bytes32 s) = vm.sign(2, hash);
-//
-//        assertFalse(signedData.isVerifiedData(message, v, r, s));
-//    }
 }
