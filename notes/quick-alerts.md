@@ -12,6 +12,8 @@ http://webhook.site
 - Notifying admins when fees are paid so that they can collect.
 - Analytics for contract activity, especially while promoting a dapp.
 - Watching prices and executing trades via transaction call triggered by webhook.
+- Twitter bots for price activity.
+- Calendar events for DAO and voting.  
 
 
 ## Good to know
