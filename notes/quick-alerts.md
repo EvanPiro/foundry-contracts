@@ -19,5 +19,12 @@ You can subscribe to topics, which are hashes of the function signature of an ev
 
 https://www.4byte.directory/
 
+## Links
+
+- https://www.youtube.com/watch?v=hTEJo2cNWHo
+- https://www.quicknode.com/guides/quicknode-products/quickalerts/an-overview-of-quicknodes-quickalerts/
+- https://github.com/velvet-shark/telegram-webhook
+
+
 
 
