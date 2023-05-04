@@ -7,13 +7,14 @@ import "../src/NFTPrinter.sol";
 contract DeployAndMint is Script {
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        address deployerAddr = vm.addr(deployerPrivateKey);
+
         vm.startBroadcast(deployerPrivateKey);
         NFTPrinter nftPrinter = new NFTPrinter();
 
-        string memory uri = "ipfs://bafkreidjvcymdofy3wnq5epkxlyibrng3ik6yllxaaio7ggxvykatnsvti";
-
-        nftPrinter.printNFT(deployerAddr, uri);
+//        address deployerAddr = vm.addr(deployerPrivateKey);
+//        string memory uri = "ipfs://bafkreicgynawxgcws6frx6jyp5wpc7klfrfwjjdjkadnhdu5ww4mruup6m";
+//
+//        nftPrinter.printNFT(deployerAddr, uri);
 
         vm.stopBroadcast();
     }
