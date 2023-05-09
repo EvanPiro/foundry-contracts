@@ -28,12 +28,12 @@ contract NFTPrinter is ERC721URIStorage, INFTPrinter, Ownable {
         return newID;
     }
 
+
     /**
      * @dev `collect` handles the sending of collected fees to the owner account.
      * This can be called by any user.
      */
     function collect() external {
-        address payable _owner = payable(owner());
-        _owner.transfer(address(this).balance);
+        payable(owner()).call{value: address(this).balance}("");
     }
 }

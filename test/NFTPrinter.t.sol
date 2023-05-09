@@ -7,8 +7,10 @@ import "openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
 contract NFTPrinterTest is Test {
     NFTPrinter nftPrinter;
     uint256 fee = 10_000_000 gwei;
+    address owner = address(1);
 
     function setUp() public {
+        vm.prank(owner);
         nftPrinter = new NFTPrinter();
     }
 
@@ -42,5 +44,13 @@ contract NFTPrinterTest is Test {
         uint256 id = nftPrinter.printNFT{value: fee}(senderAddress, tokenURI);
         uint256 contractBalance = address(nftPrinter).balance;
         assertEq(contractBalance, fee);
+    }
+
+    function testIsWithdrawFees() public {
+        vm.deal(address(nftPrinter), fee);
+        vm.prank(owner);
+        nftPrinter.collect();
+        assertEq(address(nftPrinter).balance, 0);
+        assertEq(owner.balance, fee);
     }
 }

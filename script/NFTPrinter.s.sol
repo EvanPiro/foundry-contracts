@@ -11,11 +11,6 @@ contract DeployAndMint is Script {
         vm.startBroadcast(deployerPrivateKey);
         NFTPrinter nftPrinter = new NFTPrinter();
 
-//        address deployerAddr = vm.addr(deployerPrivateKey);
-//        string memory uri = "ipfs://bafkreicgynawxgcws6frx6jyp5wpc7klfrfwjjdjkadnhdu5ww4mruup6m";
-//
-//        nftPrinter.printNFT(deployerAddr, uri);
-
         vm.stopBroadcast();
     }
 }
