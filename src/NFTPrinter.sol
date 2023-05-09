@@ -6,9 +6,9 @@ import "openzeppelin-contracts/contracts/access/Ownable.sol";
 
 import "./INFTPrinter.sol";
 
-
 contract NFTPrinter is ERC721URIStorage, INFTPrinter, Ownable {
     using Counters for Counters.Counter;
+
     uint256 public fee = 10_000_000 gwei;
 
     Counters.Counter private _tokenIds;
@@ -27,7 +27,6 @@ contract NFTPrinter is ERC721URIStorage, INFTPrinter, Ownable {
         _tokenIds.increment();
         return newID;
     }
-
 
     /**
      * @dev `collect` handles the sending of collected fees to the owner account.

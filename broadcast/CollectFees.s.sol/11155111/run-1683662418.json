@@ -1,0 +1,36 @@
+{
+  "transactions": [
+    {
+      "hash": "0xff2cac753af45196dab2a2f6f379e62cf54008e9383794d45e757a0215018f46",
+      "transactionType": "CALL",
+      "contractName": "NFTPrinter",
+      "contractAddress": "0x394a4aA08CF1D102db582497db13b9e85C3A4762",
+      "function": "collect()",
+      "arguments": [],
+      "rpc": "https://eth-sepolia.g.alchemy.com/v2/Wl-PFP2DDTyM33JckGNoEA0DWFNE9lIw",
+      "transaction": {
+        "type": "0x02",
+        "from": "0x1a22f8e327add0320d7ea341dfe892e43bc60322",
+        "to": "0x394a4aa08cf1d102db582497db13b9e85c3a4762",
+        "gas": "0xacfd",
+        "value": "0x0",
+        "data": "0xe5225381",
+        "nonce": "0x14",
+        "accessList": []
+      },
+      "additionalContracts": [],
+      "isFixedGasLimit": false
+    }
+  ],
+  "receipts": [],
+  "libraries": [],
+  "pending": [
+    "0xff2cac753af45196dab2a2f6f379e62cf54008e9383794d45e757a0215018f46"
+  ],
+  "path": "/Users/emanegux/signed-data/broadcast/CollectFees.s.sol/11155111/run-latest.json",
+  "returns": {},
+  "timestamp": 1683662418,
+  "chain": 11155111,
+  "multi": false,
+  "commit": "c0c7aa6"
+}

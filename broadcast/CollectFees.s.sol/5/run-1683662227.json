@@ -1,0 +1,36 @@
+{
+  "transactions": [
+    {
+      "hash": "0x663a32121c285739b27e776661b46ca8ae989b14dc183c7d608810bc6ea555b9",
+      "transactionType": "CALL",
+      "contractName": "NFTPrinter",
+      "contractAddress": "0xd90cE35A4befCD62d767044F26c120C0979d2d22",
+      "function": "collect()",
+      "arguments": [],
+      "rpc": "https://eth-goerli.g.alchemy.com/v2/PISW5E-SXbkRZIVjP6U8w1rgna-FrOI-",
+      "transaction": {
+        "type": "0x02",
+        "from": "0x1a22f8e327add0320d7ea341dfe892e43bc60322",
+        "to": "0xd90ce35a4befcd62d767044f26c120c0979d2d22",
+        "gas": "0xacfd",
+        "value": "0x0",
+        "data": "0xe5225381",
+        "nonce": "0x41",
+        "accessList": []
+      },
+      "additionalContracts": [],
+      "isFixedGasLimit": false
+    }
+  ],
+  "receipts": [],
+  "libraries": [],
+  "pending": [
+    "0x663a32121c285739b27e776661b46ca8ae989b14dc183c7d608810bc6ea555b9"
+  ],
+  "path": "/Users/emanegux/signed-data/broadcast/CollectFees.s.sol/5/run-latest.json",
+  "returns": {},
+  "timestamp": 1683662227,
+  "chain": 5,
+  "multi": false,
+  "commit": "c0c7aa6"
+}
