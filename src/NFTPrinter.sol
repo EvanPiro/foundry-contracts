@@ -3,10 +3,11 @@ pragma solidity ^0.8.0;
 import "openzeppelin-contracts/contracts/utils/Counters.sol";
 import "openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "openzeppelin-contracts/contracts/access/Ownable.sol";
-
+import "openzeppelin-contracts/contracts/security/ReentrancyGuard.sol";
 import "./INFTPrinter.sol";
 
-contract NFTPrinter is ERC721URIStorage, INFTPrinter, Ownable {
+
+contract NFTPrinter is ERC721URIStorage, INFTPrinter, Ownable, ReentrancyGuard {
     using Counters for Counters.Counter;
 
     uint256 public fee = 10_000_000 gwei;
@@ -32,7 +33,7 @@ contract NFTPrinter is ERC721URIStorage, INFTPrinter, Ownable {
      * @dev `collect` handles the sending of collected fees to the owner account.
      * This can be called by any user.
      */
-    function collect() external {
+    function collect() external nonReentrant {
         payable(owner()).call{value: address(this).balance}("");
     }
 }
