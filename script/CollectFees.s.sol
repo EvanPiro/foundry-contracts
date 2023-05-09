@@ -6,7 +6,7 @@ import "../src/NFTPrinter.sol";
 
 contract CollectFees is Script {
     // Goerli Address
-    address nftPrinterAddress = 0x394a4aA08CF1D102db582497db13b9e85C3A4762;
+    address nftPrinterAddress = 0xa47d17727fDe3826d92A77BE2f83F6fb1d7254e8;
 
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
