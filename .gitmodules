@@ -7,3 +7,6 @@
 	url = https://github.com/openzeppelin/openzeppelin-contracts
 	branch = v4.8.1
 	ignore = dirty
+[submodule "lib/chainlink"]
+	path = lib/chainlink
+	url = https://github.com/smartcontractkit/chainlink
