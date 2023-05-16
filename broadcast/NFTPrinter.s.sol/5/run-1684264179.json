@@ -21,45 +21,14 @@
       "isFixedGasLimit": false
     }
   ],
-  "receipts": [
-    {
-      "transactionHash": "0xcbedfa5efb3bfc0d630fc6a7be3c08b0734a951092f87f28388bd9e334ecbb75",
-      "transactionIndex": "0xa",
-      "blockHash": "0xf33d56bb4d428d954987b616bd0feed0da5becbbd2c15a8716806feb2ca5f7d4",
-      "blockNumber": "0x8981cc",
-      "from": "0x1A22f8e327adD0320d7ea341dFE892e43bC60322",
-      "to": null,
-      "cumulativeGasUsed": "0x162d7eb",
-      "gasUsed": "0x1d012a",
-      "contractAddress": "0x7A44f835446D3e8729003914F10480d7f79bEE94",
-      "logs": [
-        {
-          "address": "0x7A44f835446D3e8729003914F10480d7f79bEE94",
-          "topics": [
-            "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
-            "0x0000000000000000000000000000000000000000000000000000000000000000",
-            "0x0000000000000000000000001a22f8e327add0320d7ea341dfe892e43bc60322"
-          ],
-          "data": "0x",
-          "blockHash": "0xf33d56bb4d428d954987b616bd0feed0da5becbbd2c15a8716806feb2ca5f7d4",
-          "blockNumber": "0x8981cc",
-          "transactionHash": "0xcbedfa5efb3bfc0d630fc6a7be3c08b0734a951092f87f28388bd9e334ecbb75",
-          "transactionIndex": "0xa",
-          "logIndex": "0x22",
-          "removed": false
-        }
-      ],
-      "status": "0x1",
-      "logsBloom": "0x00000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000020100000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000020000000000000000000800000000000000000000000000000000400000000000000000800010000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000400000000000000000000000000",
-      "type": "0x2",
-      "effectiveGasPrice": "0xb5182472"
-    }
-  ],
+  "receipts": [],
   "libraries": [],
-  "pending": [],
+  "pending": [
+    "0xcbedfa5efb3bfc0d630fc6a7be3c08b0734a951092f87f28388bd9e334ecbb75"
+  ],
   "path": "/Users/emanegux/signed-data/broadcast/NFTPrinter.s.sol/5/run-latest.json",
   "returns": {},
-  "timestamp": 1684264216,
+  "timestamp": 1684264179,
   "chain": 5,
   "multi": false,
   "commit": "13396e5"

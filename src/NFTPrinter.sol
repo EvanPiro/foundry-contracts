@@ -39,6 +39,7 @@ contract NFTPrinter is ERC721URIStorage, Ownable, ReentrancyGuard {
 
     function setListing(uint256 tokenId, uint256 price) external {
         require(msg.sender == ownerOf(tokenId), "Must be token owner to set listing");
+        require(price > 0, "Listing price must be greater than 0");
         approve(address(this), tokenId);
         listing[tokenId] = price;
     }
@@ -57,6 +58,7 @@ contract NFTPrinter is ERC721URIStorage, Ownable, ReentrancyGuard {
 
         payable(ownerOf(tokenId)).call{value: payment}("");
         _transfer(nftOwner, msg.sender, tokenId);
+
     }
 
     /**
