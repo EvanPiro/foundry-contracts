@@ -1,0 +1,36 @@
+{
+  "transactions": [
+    {
+      "hash": "0xe4c96945423465280d32e4ea9e0b1008a314bd435cfc25158be00a1e1f209fb8",
+      "transactionType": "CALL",
+      "contractName": null,
+      "contractAddress": "0xa47d17727fDe3826d92A77BE2f83F6fb1d7254e8",
+      "function": null,
+      "arguments": null,
+      "rpc": "https://eth-sepolia.g.alchemy.com/v2/Wl-PFP2DDTyM33JckGNoEA0DWFNE9lIw",
+      "transaction": {
+        "type": "0x02",
+        "from": "0x1a22f8e327add0320d7ea341dfe892e43bc60322",
+        "to": "0xa47d17727fde3826d92a77be2f83f6fb1d7254e8",
+        "gas": "0xb038",
+        "value": "0x0",
+        "data": "0xe5225381",
+        "nonce": "0x3a",
+        "accessList": []
+      },
+      "additionalContracts": [],
+      "isFixedGasLimit": false
+    }
+  ],
+  "receipts": [],
+  "libraries": [],
+  "pending": [
+    "0xe4c96945423465280d32e4ea9e0b1008a314bd435cfc25158be00a1e1f209fb8"
+  ],
+  "path": "/Users/emanegux/signed-data/broadcast/CollectFees.s.sol/11155111/run-latest.json",
+  "returns": {},
+  "timestamp": 1684198700,
+  "chain": 11155111,
+  "multi": false,
+  "commit": "01b7964"
+}
