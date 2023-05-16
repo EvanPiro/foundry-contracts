@@ -122,4 +122,17 @@ contract NFTPrinterTest is Test {
         vm.expectRevert("Must pay at least the price of the listing");
         nftPrinter.buyListing{value: 1}(tokenId);
     }
+
+    function test_BuyerCannotBuyNFTWithoutListing() public {
+        address buyer = address(2);
+        vm.deal(buyer, fee * 2);
+        address seller = address(3);
+        vm.deal(seller, fee);
+        string memory tokenURI = "https://example.com";
+        uint256 tokenId = nftPrinter.printNFT{value: fee}(seller, tokenURI);
+
+        vm.prank(buyer);
+        vm.expectRevert("No listing found for that token ID");
+        nftPrinter.buyListing{value: 0}(tokenId);
+    }
 }
