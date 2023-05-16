@@ -107,4 +107,19 @@ contract NFTPrinterTest is Test {
 
         assertEq(nftPrinter.ownerOf(tokenId), buyer);
     }
+
+    function test_BuyerMustPayAtLeastPrice() public {
+        address buyer = address(2);
+        vm.deal(buyer, fee * 2);
+        address seller = address(3);
+        vm.deal(seller, fee);
+        string memory tokenURI = "https://example.com";
+        uint256 tokenId = nftPrinter.printNFT{value: fee}(seller, tokenURI);
+        vm.prank(seller);
+        nftPrinter.setListing(tokenId, fee);
+
+        vm.prank(buyer);
+        vm.expectRevert("Must pay at least the price of the listing");
+        nftPrinter.buyListing{value: 1}(tokenId);
+    }
 }
