@@ -58,7 +58,7 @@ contract NFTPrinter is ERC721URIStorage, Ownable, ReentrancyGuard {
 
         payable(ownerOf(tokenId)).call{value: payment}("");
         _transfer(nftOwner, msg.sender, tokenId);
-
+        delete listing[tokenId];
     }
 
     /**

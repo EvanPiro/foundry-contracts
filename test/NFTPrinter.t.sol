@@ -90,6 +90,16 @@ contract NFTPrinterTest is Test {
         assertEq(nftPrinter.mintFee(), 0 gwei);
     }
 
+    function test_ListingIsDeletedOffMarketAfterSale() public {
+        string memory tokenURI = "https://example.com";
+        uint256 tokenId = nftPrinter.printNFT{value: fee}(address(this), tokenURI);
+        nftPrinter.setListing(tokenId, fee);
+        nftPrinter.buyListing{value: fee}(tokenId);
+
+        vm.expectRevert("No listing found for that token ID");
+        nftPrinter.buyListing{value: fee}(tokenId);
+    }
+
     function test_BuyerWillReceiveListingAndSellerPaid() public {
         address buyer = address(2);
         vm.deal(buyer, fee * 2);
