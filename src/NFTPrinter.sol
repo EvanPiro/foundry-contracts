@@ -37,6 +37,12 @@ contract NFTPrinter is ERC721URIStorage, Ownable, ReentrancyGuard {
         listingFeeBips = _bips;
     }
 
+    function removeListing(uint256 tokenId) external {
+        require(msg.sender == ownerOf(tokenId), "Must be token owner to remove listing");
+        delete listing[tokenId];
+        approve(address(0), tokenId);
+    }
+
     function setListing(uint256 tokenId, uint256 price) external {
         require(msg.sender == ownerOf(tokenId), "Must be token owner to set listing");
         require(price > 0, "Listing price must be greater than 0");

@@ -123,8 +123,7 @@ contract NFTPrinterTest is Test {
         vm.deal(buyer, fee * 2);
         address seller = address(3);
         vm.deal(seller, fee);
-        string memory tokenURI = "https://example.com";
-        uint256 tokenId = nftPrinter.printNFT{value: fee}(seller, tokenURI);
+        uint256 tokenId = nftPrinter.printNFT{value: fee}(seller, "https://example.com");
         vm.prank(seller);
         nftPrinter.setListing(tokenId, fee);
 
@@ -138,11 +137,31 @@ contract NFTPrinterTest is Test {
         vm.deal(buyer, fee * 2);
         address seller = address(3);
         vm.deal(seller, fee);
-        string memory tokenURI = "https://example.com";
-        uint256 tokenId = nftPrinter.printNFT{value: fee}(seller, tokenURI);
+        uint256 tokenId = nftPrinter.printNFT{value: fee}(seller, "https://example.com");
 
         vm.prank(buyer);
         vm.expectRevert("No listing found for that token ID");
         nftPrinter.buyListing{value: 0}(tokenId);
+    }
+
+    function test_SellerCanRemoveListing() public {
+        uint256 tokenId = nftPrinter.printNFT{value: fee}(address(this), "https://example.com");
+
+        nftPrinter.setListing(tokenId, fee);
+        nftPrinter.removeListing(tokenId);
+
+        vm.expectRevert("No listing found for that token ID");
+        nftPrinter.getListing(tokenId);
+    }
+
+    function test_NonSellerCannotRemoveListing() public {
+        address buyer = address(2);
+        vm.deal(buyer, fee * 2);
+        uint256 tokenId = nftPrinter.printNFT{value: fee}(address(this), "https://example.com");
+        nftPrinter.setListing(tokenId, fee);
+
+        vm.expectRevert("Must be token owner to remove listing");
+        vm.prank(buyer);
+        nftPrinter.removeListing(tokenId);
     }
 }
