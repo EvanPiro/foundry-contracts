@@ -61,7 +61,7 @@ contract NFTPrinterTest is Test {
         assertEq(contractBalance, 0);
     }
 
-    function test_FeeIsCollected() public {
+    function test_FeeIsCollectedOnPrint() public {
         uint256 currentBalance = address(this).balance;
         string memory tokenURI = "https://example.com";
         vm.deal(user, fee);
@@ -70,6 +70,26 @@ contract NFTPrinterTest is Test {
 
         assertEq(address(nftPrinter).balance, 0);
         assertEq(address(this).balance, currentBalance + fee);
+    }
+
+    function test_FeeIsCollectedOnBuy() public {
+        string memory tokenURI = "https://example.com";
+        uint256 price = 10_000_000 gwei;
+        uint256 bips = 100;
+        uint256 currentBalance = address(this).balance;
+
+        nftPrinter.setListingFeeBips(bips);
+
+        vm.deal(user, fee*10);
+
+        vm.startPrank(user);
+        uint256 tokenId = nftPrinter.printNFT{value: fee}(user, tokenURI);
+        nftPrinter.setListing(tokenId, price);
+        nftPrinter.buyListing{value: price}(tokenId);
+        vm.stopPrank();
+
+        assertEq(address(nftPrinter).balance, 0);
+        assertEq(address(this).balance, currentBalance + fee + ((price * bips) / 10_000));
     }
 
     function test_NonTokenOwnerCannotListNFT() public {

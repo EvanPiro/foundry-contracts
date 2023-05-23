@@ -16,7 +16,7 @@ contract DeployAndMint is Script {
         NFTPrinter nftPrinterImpl = new NFTPrinter();
         new TransparentUpgradeableProxy(
             address(nftPrinterImpl),
-            address(deployerPrivateKey),
+            address(this),
             abi.encodeWithSignature("initialize(address)", feeCollectorAddress)
         );
 

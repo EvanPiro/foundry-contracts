@@ -58,7 +58,7 @@ contract NFTPrinter is Initializable, OwnableUpgradeable, ReentrancyGuardUpgrade
 
     function setListing(uint256 tokenId, uint256 price) external {
         require(msg.sender == ownerOf(tokenId), "Must be token owner to set listing");
-        require(price > 0, "Listing price must be greater than 0");
+        require(price > 10_000, "Listing price must be greater than 10,000 wei");
         approve(address(this), tokenId);
         listing[tokenId] = price;
     }
@@ -75,7 +75,7 @@ contract NFTPrinter is Initializable, OwnableUpgradeable, ReentrancyGuardUpgrade
         uint256 fee = (price * listingFeeBips) / 10_000;
         uint256 payment = price - fee;
 
-        payable(ownerOf(tokenId)).call{value: payment}("");
+        Address.sendValue(payable(nftOwner), payment);
         Address.sendValue(payable(owner()), fee);
         _transfer(nftOwner, msg.sender, tokenId);
         delete listing[tokenId];
