@@ -2,8 +2,6 @@ pragma solidity ^0.8.16;
 
 import "forge-std/Test.sol";
 import "../src/NFTPrinter.sol";
-import "openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
-import "lib/openzeppelin-contracts/contracts/proxy/Proxy.sol";
 import "openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
 
 contract NFTPrinterTest is Test {
