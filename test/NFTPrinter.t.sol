@@ -3,15 +3,32 @@ pragma solidity ^0.8.16;
 import "forge-std/Test.sol";
 import "../src/NFTPrinter.sol";
 import "openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
+import "lib/openzeppelin-contracts/contracts/proxy/Proxy.sol";
+import "openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
 
 contract NFTPrinterTest is Test {
+    NFTPrinter nftPrinterImpl;
     NFTPrinter nftPrinter;
     uint256 fee = 10_000_000 gwei;
-    address owner = address(1);
+    address user = address(1);
+    address deployer = address(4);
+    TransparentUpgradeableProxy proxy;
+
+    receive() external payable {}
 
     function setUp() public {
-        vm.prank(owner);
-        nftPrinter = new NFTPrinter();
+        nftPrinterImpl = new NFTPrinter();
+        proxy = new TransparentUpgradeableProxy(
+            address(nftPrinterImpl),
+            deployer,
+            abi.encodeWithSignature("initialize(address)", address(this))
+        );
+
+        nftPrinter = NFTPrinter(address(proxy));
+    }
+
+    function test_OwnerIsSet() public {
+        assertEq(nftPrinter.owner(), address(this));
     }
 
     function test_NFTIsTransferred() public {
@@ -38,20 +55,23 @@ contract NFTPrinterTest is Test {
         assertEq(ownerAddress, receiverAddress);
     }
 
-    function test_FeesIsStored() public {
+    function test_FeesIsNotStored() public {
         string memory tokenURI = "https://example.com";
         address senderAddress = address(this);
         nftPrinter.printNFT{value: fee}(senderAddress, tokenURI);
         uint256 contractBalance = address(nftPrinter).balance;
-        assertEq(contractBalance, fee);
+        assertEq(contractBalance, 0);
     }
 
-    function test_FeeIsCollectable() public {
-        vm.deal(address(nftPrinter), fee);
-        vm.prank(owner);
-        nftPrinter.collect();
+    function test_FeeIsCollected() public {
+        uint256 currentBalance = address(this).balance;
+        string memory tokenURI = "https://example.com";
+        vm.deal(user, fee);
+        vm.prank(user);
+        nftPrinter.printNFT{value: fee}(user, tokenURI);
+
         assertEq(address(nftPrinter).balance, 0);
-        assertEq(owner.balance, fee);
+        assertEq(address(this).balance, currentBalance + fee);
     }
 
     function test_NonTokenOwnerCannotListNFT() public {
@@ -84,8 +104,6 @@ contract NFTPrinterTest is Test {
     }
 
     function test_OwnerCanSetMintFee() public {
-        vm.deal(address(owner), fee);
-        vm.prank(owner);
         nftPrinter.setMintFee(0 gwei);
         assertEq(nftPrinter.mintFee(), 0 gwei);
     }

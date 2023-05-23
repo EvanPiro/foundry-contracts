@@ -1,20 +1,32 @@
 pragma solidity ^0.8.0;
 
 import "openzeppelin-contracts/contracts/utils/Counters.sol";
-import "openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "openzeppelin-contracts/contracts/access/Ownable.sol";
-import "openzeppelin-contracts/contracts/security/ReentrancyGuard.sol";
+import "openzeppelin-contracts-upgradeable/contracts/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
+import "openzeppelin-contracts-upgradeable/contracts/access/OwnableUpgradeable.sol";
+import "openzeppelin-contracts-upgradeable/contracts/security/ReentrancyGuardUpgradeable.sol";
+import "openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol";
+import "openzeppelin-contracts/contracts/utils/Address.sol";
 
-contract NFTPrinter is ERC721URIStorage, Ownable, ReentrancyGuard {
+contract NFTPrinter is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable, ERC721URIStorageUpgradeable {
     using Counters for Counters.Counter;
 
-    uint256 public mintFee = 10_000_000 gwei;
-    uint256 public listingFeeBips = 50;
+    uint256 public mintFee;
+    uint256 public listingFeeBips;
     mapping(uint256 => uint256) listing;
 
     Counters.Counter private _tokenIds;
 
-    constructor() ERC721("clicknmint", "CNM") {}
+    constructor() {
+        _disableInitializers();
+    }
+
+    function initialize(address owner) public initializer {
+        __ERC721_init("clicknmint", "CNM");
+        __Ownable_init();
+        transferOwnership(owner);
+        mintFee = 10_000_000 gwei;
+        listingFeeBips = 50;
+    }
 
     /**
      * @dev Mints a token for the provided recipient and sets the provided
@@ -22,6 +34,7 @@ contract NFTPrinter is ERC721URIStorage, Ownable, ReentrancyGuard {
      */
     function printNFT(address recipient, string memory tokenURI) external payable returns (uint256) {
         require(msg.value >= mintFee, "Fee of 0.01 must be added to transaction");
+        Address.sendValue(payable(owner()), msg.value);
         uint256 newID = _tokenIds.current();
         _mint(recipient, newID);
         _setTokenURI(newID, tokenURI);
@@ -63,15 +76,8 @@ contract NFTPrinter is ERC721URIStorage, Ownable, ReentrancyGuard {
         uint256 payment = price - fee;
 
         payable(ownerOf(tokenId)).call{value: payment}("");
+        Address.sendValue(payable(owner()), fee);
         _transfer(nftOwner, msg.sender, tokenId);
         delete listing[tokenId];
-    }
-
-    /**
-     * @dev `collect` handles the sending of collected fees to the owner account.
-     * This can be called by any user.
-     */
-    function collect() external nonReentrant {
-        payable(owner()).call{value: address(this).balance}("");
     }
 }
