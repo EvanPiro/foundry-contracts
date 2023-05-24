@@ -2,7 +2,7 @@ pragma solidity ^0.8.16;
 
 import "forge-std/Test.sol";
 import "../src/NFTPrinter.sol";
-import "openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
+import "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
 
 contract NFTPrinterTest is Test {
     NFTPrinter nftPrinterImpl;
@@ -80,7 +80,7 @@ contract NFTPrinterTest is Test {
 
         nftPrinter.setListingFeeBips(bips);
 
-        vm.deal(user, fee*10);
+        vm.deal(user, fee * 10);
 
         vm.startPrank(user);
         uint256 tokenId = nftPrinter.printNFT{value: fee}(user, tokenURI);

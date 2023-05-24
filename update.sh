@@ -1,0 +1,1 @@
+forge script script/UpdateNFTPrinter.s.sol:UpdateNFTPrinter --rpc-url $SEPOLIA_RPC_URL --broadcast

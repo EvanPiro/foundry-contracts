@@ -1,27 +1,23 @@
 pragma solidity ^0.8.0;
 
-import "openzeppelin-contracts/contracts/utils/Counters.sol";
-import "openzeppelin-contracts-upgradeable/contracts/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
-import "openzeppelin-contracts-upgradeable/contracts/access/OwnableUpgradeable.sol";
-import "openzeppelin-contracts-upgradeable/contracts/security/ReentrancyGuardUpgradeable.sol";
-import "openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol";
-import "openzeppelin-contracts/contracts/utils/Address.sol";
+import "lib/openzeppelin-contracts/contracts/utils/Counters.sol";
+import "lib/openzeppelin-contracts-upgradeable/contracts/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
+import "lib/openzeppelin-contracts-upgradeable/contracts/access/OwnableUpgradeable.sol";
+import "lib/openzeppelin-contracts-upgradeable/contracts/security/ReentrancyGuardUpgradeable.sol";
+import "lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol";
+import "lib/openzeppelin-contracts/contracts/utils/Address.sol";
 
-contract NFTPrinter is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable, ERC721URIStorageUpgradeable {
+contract NFTPrinterV2 is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable, ERC721URIStorageUpgradeable {
     using Counters for Counters.Counter;
 
     uint256 public mintFee;
     uint256 public listingFeeBips;
     mapping(uint256 => uint256) listing;
-
     Counters.Counter private _tokenIds;
+    uint256 public updateTest;
 
-    function initialize(address owner) public initializer {
-        __ERC721_init("clicknmint", "CNM");
-        __Ownable_init();
-        transferOwnership(owner);
-        mintFee = 10_000_000 gwei;
-        listingFeeBips = 50;
+    function setUpdateTest(uint256 test) public {
+        updateTest = test;
     }
 
     /**
