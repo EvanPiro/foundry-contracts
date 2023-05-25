@@ -15,7 +15,6 @@ contract UpgradeNFTPrinter is Test {
     function setUp() public {
         nftPrinterImpl = new NFTPrinter();
         nftPrinterV2Impl = new NFTPrinterV2();
-
     }
 
     function test_ProxyLoadedFromAddress() public {
@@ -26,7 +25,6 @@ contract UpgradeNFTPrinter is Test {
 
         TransparentUpgradeableProxy loadedProxy = TransparentUpgradeableProxy(proxyAddress);
         assertEq(proxy.implementation(), loadedProxy.implementation());
-
     }
 
     function test_UpgradesToV2() public {
@@ -51,5 +49,4 @@ contract UpgradeNFTPrinter is Test {
         assertEq(nftPrinterV2.updateTest(), bips);
         vm.stopPrank();
     }
-
 }

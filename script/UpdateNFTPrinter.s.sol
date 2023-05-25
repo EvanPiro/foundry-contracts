@@ -17,8 +17,7 @@ contract UpdateNFTPrinter is Script {
         console.log(address(this));
 
         NFTPrinterV2 nftPrinterV2 = new NFTPrinterV2();
-        TransparentUpgradeableProxy proxy =
-            TransparentUpgradeableProxy(proxyAddress);
+        TransparentUpgradeableProxy proxy = TransparentUpgradeableProxy(proxyAddress);
 
         proxy.upgradeTo(address(nftPrinterV2));
 
