@@ -10,6 +10,8 @@ As a user who
 3. is willing to hold onto it for that duration
 I want USD spending power, so that I can draw some kind of liquid value from ETH while still owning it long term.
 
+As an arbitrager, I would like to run a scheduled script that makes me money.
+
 ## Contracts
 
 ### Position
@@ -59,3 +61,10 @@ Responsible for providing price data to calculate collatoraliation ratio
 ## TBD
 
 Strategy for locking down price oracle so that LINK balance is not spent through excess requests.
+
+
+
+
+
+
+

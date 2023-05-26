@@ -23,7 +23,7 @@ contract Notary is Ownable {
     bool public activated;
 
     modifier isActivated() {
-        require(activated, "Notary has not be activated");
+        require(activated, "Notary has not been activated");
         _;
     }
 
@@ -46,12 +46,12 @@ contract Notary is Ownable {
      */
     function openPosition(address ownerAddress) public isActivated returns (address positionAddress) {
         Position position = new Position(minRatio, priceFeedAddress, coinAddress, ownerAddress);
-        address positionAddress = address(position);
+        address _positionAddress = address(position);
 
-        isValidPosition[positionAddress] = true;
+        isValidPosition[_positionAddress] = true;
 
-        emit PositionOpened(positionAddress);
-        return address(positionAddress);
+        emit PositionOpened(_positionAddress);
+        return _positionAddress;
     }
 }
 
@@ -66,12 +66,15 @@ contract Position is Ownable {
     PriceFeed private immutable priceFeed;
     Coin private immutable coin;
     uint256 debt;
+    bool isInsolvent;
 
     constructor(uint256 _minRatio, address _priceFeedAddress, address _coinAddress, address _owner) public {
         minRatio = _minRatio;
         priceFeed = PriceFeed(_priceFeedAddress);
         coin = Coin(_coinAddress);
         transferOwnership(_owner);
+        debt = 0;
+        isInsolvent = false;
     }
 
     /**
@@ -83,13 +86,31 @@ contract Position is Ownable {
         return ((col * price) / (debt + _moreDebt)) >= minRatio;
     }
 
-    function take(uint256 _moreDebt) public onlyOwner {
-        coin.mint(address(this), _moreDebt);
+    /**
+     * @dev Takes out loan against collateral if the vault is solvent
+     */
+    function take(address _receiver, uint256 _moreDebt) public onlyOwner {
+        require(canTake(_moreDebt), "Position cannot take more debt");
+        coin.mint(address(this), _receiver, _moreDebt);
+        debt = debt + _moreDebt;
+    }
+
+    /**
+     * @dev Liquidates vault if priceId points to a price record of insolvency.
+     */
+    function liquidate(uint priceId) public {
+        uint256 _price = priceFeed.price();
+        uint256 _col = address(this).balance;
+        uint256 cRatio = (_col * _price) / debt;
+        require(cRatio < minRatio, "Position is collatoralized");
+
+//        (timestamp, price) = priceFeed.getPrice(priceId);
+
     }
 }
 
 /**
- * @dev Coin contract manages the supply of the stable coin
+ * @dev Coin contract manages the supply of the stable coin.
  *
  * This contract is simple ER20 token contract with constraints on minting, where minting
  * is limited to a Notary registered Position that is above the mininum collateralization
@@ -101,14 +122,12 @@ contract Coin is ERC20 {
     constructor(address _notaryAddress) ERC20("Coin", "coin") {
         notary = Notary(_notaryAddress);
     }
-
-    function mint(address _positionAddress, uint256 _moreDebt) public {
+    /**
+     * @dev Mints for authenticated position contracts.
+     */
+    function mint(address _positionAddress, address _receiver, uint256 _moreDebt) public {
         require(notary.isValidPosition(_positionAddress), "Caller is not authorized to mint");
-        Position position = Position(_positionAddress);
-
-        require(position.canTake(_moreDebt), "Position cannot take more debt");
-
-        _mint(_positionAddress, _moreDebt);
+        _mint(_receiver, _moreDebt);
     }
 }
 
@@ -122,6 +141,7 @@ contract Coin is ERC20 {
 contract PriceFeed {
     AggregatorV3Interface internal priceFeed;
     uint256 public price;
+    uint256 public timestamp;
 
     constructor(address aggregatorAddress) {
         priceFeed = AggregatorV3Interface(aggregatorAddress);
@@ -138,7 +158,7 @@ contract PriceFeed {
             int256 _price,
             /*uint startedAt*/
             ,
-            /*uint timeStamp*/
+            uint256 _timestamp
             ,
             /*uint80 answeredInRound*/
         ) = priceFeed.latestRoundData();
